@@ -1,6 +1,5 @@
 language: python
 python:
   - "3.4"
-script: nosetests
-python order.py
+script: python3 order.py
 
