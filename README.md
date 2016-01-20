@@ -19,7 +19,7 @@ These are just a bunch of totally random ideas for possibilities for our game.
  - Shopping spree
  - Thief stealing items from a house, steal as much as possible before alarm
    goes off.
-  - Easter egg hunt - Each egg has its own value, need to collect as many as 
+ - Easter egg hunt - Each egg has its own value, need to collect as many as 
    you can in a given time.
  - Beach search - Finding rubbish on the beach and sorting them in the 
    increasing value.
