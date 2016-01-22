@@ -10,7 +10,7 @@ helps manage projects using lists and stuff. Might be worth exploring, but could
 be a dead end. https://trello.com/b/fjeu9Pvw/robot-bargain-hunt
 
 
-#Ideas#
+##Ideas##
 These are just a bunch of totally random ideas for possibilities for our game.
  - Alien planet game finding creatures/samples etc.
  - Archeology game finding artifacts in a dig site.
