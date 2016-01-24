@@ -18,7 +18,7 @@ generated and placed onto the map, and can be controlled with the arrow keys.
 If anybody can produce some more/better art in terms of tiles/player/items/other
 assets (such as trees, bushes, anything at all), I'm working with a 32 x 32
 pixel tile set, so it would need to match that. In order to achieve this, I'm
-using ![Piskel](http://www.piskelapp.com/) to make them. Also, I've not done
+using http://www.piskelapp.com/ to make them. Also, I've not done
 anything with Pygame before really so if you see any obvious mistakes etc. feel
 free to modify.
 
