@@ -2,4 +2,5 @@ language: python
 python:
   - "3.4"
 script: python3 order.py
+script: python2 ed_test/map.py
 
