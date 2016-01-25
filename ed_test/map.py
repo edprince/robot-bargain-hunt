@@ -9,7 +9,7 @@ FPS = 30
 MAPHEIGHT = 20
 TILESIZE = 32
 MAPWIDTH = 20
-TREE_DENSITY = 20
+TREE_DENSITY = 30
 #Tiles#
 DIRT = 0
 GRASS = 1
@@ -25,10 +25,18 @@ i = 0
 
 
 def read_file(f):
+    ''' File reading function
+
+    Function takes a string as name of file (f), opens, reads the contents and
+    returns contents'''
     file_object = open(f, 'r')
     return file_object.read()
 
 def parse_map(data):
+    '''Parses map data into lists
+
+    Takes characters and if matching tile types, builds a list within a list of
+    entire map'''
     tilemap_tmp = []
     '''
     types = {
@@ -64,7 +72,6 @@ def parse_map(data):
 
 parse_map(read_file('map_data.txt'))
 
-
 colors = {
         DIRT: pygame.image.load('assets/dirt.png'),
         GRASS: pygame.image.load('assets/grass.png'),
@@ -79,8 +86,12 @@ playerPos = [0,0]
 
 
 pygame.init()
+#Initialize pygame
+
+#Set constants
 FPSCLOCK = pygame.time.Clock()
 DISPLAYSURF = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
+
 #Load more assets
 PLAYER = pygame.image.load('assets/player.png').convert_alpha()
 TREE = pygame.image.load('assets/tree.png').convert_alpha()
@@ -91,9 +102,8 @@ for row in range(MAPHEIGHT):
     for column in range(MAPWIDTH):
         if tilemap[row][column] == 1:
             if random.randrange(100) < TREE_DENSITY:
-                TREE_LOCATIONS.append([column, row])#
-                #DISPLAYSURF.blit(TREE, (row*TILESIZE, column*TILESIZE))
-                #pygame.display.update()
+                #Save all coordinates of tree locations into list
+                TREE_LOCATIONS.append([column, row])
 
 
             
@@ -104,6 +114,7 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+        #Movement
         elif event.type == KEYDOWN:
             if (event.key == K_RIGHT) and ((playerPos[0] + 1) < MAPWIDTH) and tilemap[playerPos[1]][playerPos[0] + 1] != 4:
                 playerPos[0] += 1
@@ -116,23 +127,20 @@ while True:
             print tilemap[playerPos[1]][playerPos[0]]
 
 
-
+    #Draw tiles
     for row in range(MAPHEIGHT):
         for column in range(MAPWIDTH):
             DISPLAYSURF.blit(colors[tilemap[row][column]],
                     (column*TILESIZE, row*TILESIZE))
             DISPLAYSURF.blit(PLAYER, (playerPos[0]*TILESIZE,
                 playerPos[1]*TILESIZE))
-            '''
-            if [row, column] in TREE_LOCATIONS:
-                DISPLAYSU)RF.blit(TREE, (row*TILESIZE, column*TILESIZE))
-                DISPLAYSU)RF.blit(TREE, (row*TILESIZE, column*TILESIZE))
-                '''
-
+    
+    #Draw trees
     for row in range(MAPHEIGHT):
         for column in range(MAPWIDTH):
             if [row, column] in TREE_LOCATIONS:
                 DISPLAYSURF.blit(TREE, (row*TILESIZE, column*TILESIZE))
+
     pygame.display.update()
     pygame.display.flip()
     FPSCLOCK.tick()
