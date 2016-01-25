@@ -8,7 +8,7 @@ FPS = 30
 #Map data#
 MAPHEIGHT = 20
 TILESIZE = 32
-MAPWIDTH = 26
+MAPWIDTH = 20
 TREE_DENSITY = 20
 #Tiles#
 DIRT = 0
@@ -17,6 +17,7 @@ STONE = 3
 WATER = 4
 SAND = 5
 WOOD = 6
+METAL = 7
 
 
 tilemap = []
@@ -56,7 +57,9 @@ def parse_map(data):
             tilemap_tmp.append(WOOD)
         elif line == '/':
             tilemap.append(tilemap_tmp)
+            print tilemap_tmp
             tilemap_tmp = []
+            
 
 
 parse_map(read_file('map_data.txt'))
@@ -68,7 +71,8 @@ colors = {
         WATER: pygame.image.load('assets/water.png'),
         STONE: pygame.image.load('assets/stone.png'),
         SAND: pygame.image.load('assets/sand.png'),
-        WOOD: pygame.image.load('assets/wood.png')
+        WOOD: pygame.image.load('assets/wood.png'),
+        METAL: pygame.image.load('assets/metal.png')
         }
 
 playerPos = [0,0]
@@ -82,20 +86,12 @@ PLAYER = pygame.image.load('assets/player.png').convert_alpha()
 TREE = pygame.image.load('assets/tree.png').convert_alpha()
 TREE_LOCATIONS = []
 
-for i in range(MAPHEIGHT):
-    for j in range(MAPWIDTH):
-        DISPLAYSURF.blit(TREE, (2, 0)) 
-        r = random.randrange(100)
-        if r > TREE_DENSITY:
-            #DISPLAYSURF.blit(TREE, (0, 0))#
-            print r 
-            pass
 
 for row in range(MAPHEIGHT):
     for column in range(MAPWIDTH):
         if tilemap[row][column] == 1:
             if random.randrange(100) < TREE_DENSITY:
-                TREE_LOCATIONS.append([row, column])#
+                TREE_LOCATIONS.append([column, row])#
                 #DISPLAYSURF.blit(TREE, (row*TILESIZE, column*TILESIZE))
                 #pygame.display.update()
 
@@ -109,15 +105,16 @@ while True:
             pygame.quit()
             sys.exit()
         elif event.type == KEYDOWN:
-            if (event.key == K_RIGHT) and ((playerPos[0] + 1) < MAPWIDTH):
+            if (event.key == K_RIGHT) and ((playerPos[0] + 1) < MAPWIDTH) and tilemap[playerPos[1]][playerPos[0] + 1] != 4:
                 playerPos[0] += 1
-            elif (event.key == K_LEFT) and ((playerPos[0] - 1) >= 0):
+            elif (event.key == K_LEFT) and ((playerPos[0] - 1) >= 0) and tilemap[playerPos[1]][playerPos[0] - 1] != 4:
                 playerPos[0] -= 1
-            elif (event.key == K_DOWN) and ((playerPos[1] + 1) < MAPHEIGHT):
+            elif (event.key == K_DOWN) and ((playerPos[1] + 1) < MAPHEIGHT) and tilemap[playerPos[1] + 1][playerPos[0]] != 4:
                 playerPos[1] += 1
-            elif (event.key == K_UP) and ((playerPos[1] - 1) >= 0):
+            elif (event.key == K_UP) and ((playerPos[1] - 1) >= 0) and tilemap[playerPos[1] - 1][playerPos[0]] != 4:
                 playerPos[1] -= 1
-            print (playerPos[0], playerPos[1])
+            print tilemap[playerPos[1]][playerPos[0]]
+
 
 
     for row in range(MAPHEIGHT):
@@ -128,13 +125,14 @@ while True:
                 playerPos[1]*TILESIZE))
             '''
             if [row, column] in TREE_LOCATIONS:
-                DISPLAYSURF.blit(TREE, (row*TILESIZE, column*TILESIZE))
+                DISPLAYSU)RF.blit(TREE, (row*TILESIZE, column*TILESIZE))
+                DISPLAYSU)RF.blit(TREE, (row*TILESIZE, column*TILESIZE))
                 '''
-
 
     for row in range(MAPHEIGHT):
         for column in range(MAPWIDTH):
             if [row, column] in TREE_LOCATIONS:
-                DISPLAYSURF.blit(TREE, (column*TILESIZE, row*TILESIZE))
+                DISPLAYSURF.blit(TREE, (row*TILESIZE, column*TILESIZE))
     pygame.display.update()
+    pygame.display.flip()
     FPSCLOCK.tick()
