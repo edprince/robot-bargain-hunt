@@ -5,7 +5,7 @@ import random
 
 #Constants#
 FPS = 30
-INVFONT = pygame.font.Font('FreeSansBold.ttf', 18)
+
 #Map data#
 MAPHEIGHT = 20
 TILESIZE = 32
@@ -67,7 +67,7 @@ parse_map(read_file('map_data.txt'))
 colors = {
         DIRT: pygame.image.load('assets/dirt.png'),
         GRASS: pygame.image.load('assets/grass.png'),
-        WATER: pygame.image.load('assets/water.png'),
+        WATER: pygame.image.load('assets/water2.png'),
         STONE: pygame.image.load('assets/stone.png'),
         SAND: pygame.image.load('assets/sand2.png'),
         WOOD: pygame.image.load('assets/wood.png'),
@@ -89,7 +89,8 @@ pygame.init()
 
 #Set constants
 FPSCLOCK = pygame.time.Clock()
-DISPLAYSURF = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE + 50))
+DISPLAYSURF = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE + 60))
+INVFONT = pygame.font.SysFont("comicsansms",50)
 
 #Load more assets
 
@@ -98,12 +99,21 @@ TREE = 2
 BONE = 3
 COIN = 4
 
-items = {
+game_objects = {
     PLAYER: pygame.image.load('assets/player.png').convert_alpha(),
-    TREE: pygame.image.load('assets/cactus.png').convert_alpha(),
+    TREE: pygame.image.load('assets/cactus.png').convert_alpha()
+    }
+
+
+game_items = {
     BONE: pygame.image.load('assets/bone.png').convert_alpha(),
     COIN: pygame.image.load('assets/coin.png').convert_alpha()
-}
+    }
+
+inventory = {
+    BONE: 0,
+    COIN: 0
+    }
 TREE_LOCATIONS = []
 
 
@@ -113,6 +123,7 @@ for row in range(MAPHEIGHT):
             if random.randrange(100) < TREE_DENSITY:
                 #Save all coordinates of tree locations into list
                 TREE_LOCATIONS.append([column, row])
+
 
 while True:
     for event in pygame.event.get():
@@ -135,22 +146,22 @@ while True:
     #Draw tiles
     for row in range(MAPHEIGHT):
         for column in range(MAPWIDTH):
-            display(items[BONE], (3, 4))
-            display(items[COIN], (12, 8))
+            display(game_items[BONE], (3, 4))
+            display(game_items[COIN], (12, 8))
             display(colors[tilemap[row][column]], (column, row))
-            display(items[PLAYER], (playerPos[0], playerPos[1]))
+            display(game_objects[PLAYER], (playerPos[0], playerPos[1]))
             if [row, column] in TREE_LOCATIONS:
-                display(items[TREE], (row, column))
+                display(game_objects[TREE], (row, column))
+
 
     placePosition = 10
-    for item in items:
-        DISPLAYSURF.blit(items[item], (placePosition, MAPHEIGHT * TILESIZE + 20))
-        placePosition += 30
-        textObj = INVFONT.render(str(inventory[item]), True, WHITE, BLACK)
+    for i in game_items:
+        DISPLAYSURF.blit(game_items[i], (placePosition, MAPHEIGHT * TILESIZE + 20))
+        placePosition += 40
+        textObj = INVFONT.render(str(inventory[i]), True, WHITE, BLACK)
         DISPLAYSURF.blit(textObj, (placePosition, MAPHEIGHT*TILESIZE + 20))
-        placePosition += 50
-
-    
+        placePosition += 60
+        
 
     pygame.display.update()
     pygame.display.flip()
