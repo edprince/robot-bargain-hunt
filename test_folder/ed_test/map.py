@@ -5,6 +5,7 @@ import random
 
 #Constants#
 FPS = 30
+INVFONT = pygame.font.Font('FreeSansBold.ttf', 18)
 #Map data#
 MAPHEIGHT = 20
 TILESIZE = 32
@@ -18,6 +19,9 @@ WATER = 4
 SAND = 5
 WOOD = 6
 METAL = 7
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
 
 tilemap = []
@@ -85,13 +89,21 @@ pygame.init()
 
 #Set constants
 FPSCLOCK = pygame.time.Clock()
-DISPLAYSURF = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
+DISPLAYSURF = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE + 50))
 
 #Load more assets
-PLAYER = pygame.image.load('assets/player.png').convert_alpha()
-TREE = pygame.image.load('assets/cactus.png').convert_alpha()
-BONE = pygame.image.load('assets/bone.png').convert_alpha()
-COIN = pygame.image.load('assets/coin.png').convert_alpha()
+
+PLAYER = 1
+TREE = 2
+BONE = 3
+COIN = 4
+
+items = {
+    PLAYER: pygame.image.load('assets/player.png').convert_alpha(),
+    TREE: pygame.image.load('assets/cactus.png').convert_alpha(),
+    BONE: pygame.image.load('assets/bone.png').convert_alpha(),
+    COIN: pygame.image.load('assets/coin.png').convert_alpha()
+}
 TREE_LOCATIONS = []
 
 
@@ -123,12 +135,21 @@ while True:
     #Draw tiles
     for row in range(MAPHEIGHT):
         for column in range(MAPWIDTH):
-            display(BONE, (3, 4))
-            display(COIN, (12, 8))
+            display(items[BONE], (3, 4))
+            display(items[COIN], (12, 8))
             display(colors[tilemap[row][column]], (column, row))
-            display(PLAYER, (playerPos[0], playerPos[1]))
+            display(items[PLAYER], (playerPos[0], playerPos[1]))
             if [row, column] in TREE_LOCATIONS:
-                display(TREE, (row, column))
+                display(items[TREE], (row, column))
+
+    placePosition = 10
+    for item in items:
+        DISPLAYSURF.blit(items[item], (placePosition, MAPHEIGHT * TILESIZE + 20))
+        placePosition += 30
+        textObj = INVFONT.render(str(inventory[item]), True, WHITE, BLACK)
+        DISPLAYSURF.blit(textObj, (placePosition, MAPHEIGHT*TILESIZE + 20))
+        placePosition += 50
+
     
 
     pygame.display.update()
