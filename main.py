@@ -1,7 +1,7 @@
 #Code here independent of Pygame currently, keeping compatibility options open
+#Current ouput should be the list of items in descending order
 from functions import *
 from classes import *
-
 objs = []
 
 #Initialize items
@@ -12,8 +12,6 @@ item_4 = Item('sword', 25, (3, 5), 'weapon', 4)
 item_5 = Item('pot', 10, (0, 8), 'tool', 10)
 
 objs.extend((item_1, item_2, item_3, item_4, item_5))
-
 sorted_list = sort_objects(objs)
-
 for i in range(len(sorted_list)):
     print(sorted_list[i].name)
