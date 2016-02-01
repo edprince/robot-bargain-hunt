@@ -9,7 +9,7 @@ FPS = 30
 MAPHEIGHT = 20
 TILESIZE = 32
 MAPWIDTH = 20
-TREE_DENSITY = 30
+TREE_DENSITY = 10
 #Tiles#
 DIRT = 0
 GRASS = 1
@@ -38,27 +38,15 @@ def parse_map(data):
     Takes characters and if matching tile types, builds a list within a list of
     entire map'''
     tilemap_tmp = []
-    '''
-    types = {
-            '#': GRASS,
-            '~': WATER,
-            'v': SAND,
-            '_': STONE,
-            '"': DIRT,
-            '=': WOOD
-            }
-    rows = data.split('/')
-    return [[types.get(tile, -1) for tile in row] for row in rows]
-    '''
     for line in data:
         if line == '#':
-            tilemap_tmp.append(GRASS)
+            tilemap_tmp.append(SAND)
         elif line == '~':
             tilemap_tmp.append(WATER)
         elif line == 'v':
             tilemap_tmp.append(SAND)
         elif line == '_':
-            tilemap_tmp.append(STONE)
+            tilemap_tmp.append(GRASS)
         elif line == '"':
             tilemap_tmp.append(DIRT)
         elif line == '=':
@@ -77,12 +65,19 @@ colors = {
         GRASS: pygame.image.load('assets/grass.png'),
         WATER: pygame.image.load('assets/water.png'),
         STONE: pygame.image.load('assets/stone.png'),
-        SAND: pygame.image.load('assets/sand.png'),
+        SAND: pygame.image.load('assets/sand2.png'),
         WOOD: pygame.image.load('assets/wood.png'),
         METAL: pygame.image.load('assets/metal.png')
         }
 
 playerPos = [0,0]
+
+def display(item, location):
+    '''Display assets
+
+    Function takes a variable and a tuple as an asset and its location in order
+    to display it on screen'''
+    DISPLAYSURF.blit(item, (location[0] * TILESIZE, location[1] * TILESIZE))
 
 
 pygame.init()
@@ -94,20 +89,18 @@ DISPLAYSURF = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
 
 #Load more assets
 PLAYER = pygame.image.load('assets/player.png').convert_alpha()
-TREE = pygame.image.load('assets/tree.png').convert_alpha()
+TREE = pygame.image.load('assets/cactus.png').convert_alpha()
+BONE = pygame.image.load('assets/bone.png').convert_alpha()
+COIN = pygame.image.load('assets/coin.png').convert_alpha()
 TREE_LOCATIONS = []
 
 
 for row in range(MAPHEIGHT):
     for column in range(MAPWIDTH):
-        if tilemap[row][column] == 1:
+        if tilemap[row][column] == 5:
             if random.randrange(100) < TREE_DENSITY:
                 #Save all coordinates of tree locations into list
                 TREE_LOCATIONS.append([column, row])
-
-
-            
-
 
 while True:
     for event in pygame.event.get():
@@ -130,17 +123,14 @@ while True:
     #Draw tiles
     for row in range(MAPHEIGHT):
         for column in range(MAPWIDTH):
-            DISPLAYSURF.blit(colors[tilemap[row][column]],
-                    (column*TILESIZE, row*TILESIZE))
-            DISPLAYSURF.blit(PLAYER, (playerPos[0]*TILESIZE,
-                playerPos[1]*TILESIZE))
-    
-    #Draw trees
-    for row in range(MAPHEIGHT):
-        for column in range(MAPWIDTH):
+            display(BONE, (3, 4))
+            display(COIN, (12, 8))
+            display(colors[tilemap[row][column]], (column, row))
+            display(PLAYER, (playerPos[0], playerPos[1]))
             if [row, column] in TREE_LOCATIONS:
-                DISPLAYSURF.blit(TREE, (row*TILESIZE, column*TILESIZE))
+                display(TREE, (row, column))
+    
 
     pygame.display.update()
     pygame.display.flip()
-    FPSCLOCK.tick()
+    #FPSCLOCK.tick()
