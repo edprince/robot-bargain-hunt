@@ -3,16 +3,16 @@ import pygame
 
 class TextElement(pygame.font.Font):
 
-    def __init__(self, text = 'Default', size = '12', position = (0,0)):
+        def __init__(self, text = 'Default', size = '12', position = (0,0)):
 
-        self.text = text
-        self.size = size
-        self.position = position
-
-
+            self.text = text
+            self.size = size
+            self.position = position
 
 
-class VisualElement(pygame.sprite.Sprite):
+
+
+class VisualElement(pygame.sprite.DirtySprite):
     """ The Class for most GUI elements.
     x, y, width, height = int
     colour = tuple(int, int, int)
@@ -20,7 +20,7 @@ class VisualElement(pygame.sprite.Sprite):
 
     def __init__(self, x, y, width, height, colour):
 
-        pygame.sprite.Sprite.__init__(self)
+        pygame.sprite.DirtySprite.__init__(self)
         self.width = width
         self.height = height
         self.colour = colour

@@ -2,6 +2,7 @@ import pygame
 import graphics
 import GuiBase
 from constants import *
+import sys
 
 
 
@@ -31,13 +32,15 @@ class Environment(SceneBase):
     def __init__(self):
         SceneBase.__init__(self)
         self.surface = graphics.SCREEN
-        self.surface.fill((DARKGRAY))
+        #self.surface.fill((RED))
         self.gui_group = pygame.sprite.Group()
-        self.square = GuiBase.VisualElement(40,40,40,40,(LIGHTGRAY))
-        self._square = GuiBase.ClickableElement(70,70,70,70,(150,150,150))
-        self.low_square = GuiBase.ClickableElement(300,300,40,40,(LIGHTGRAY))
+        bckImg = pygame.image.load('map1.png').convert_alpha()
+        self.surface.blit(bckImg, (0,0))
+        self.square = GuiBase.VisualElement(800,450,200,100, (230,230,230))
+        self._square = GuiBase.ClickableElement(70,70,70,70, (150,150,150))
 
-        self.gui_group.add(self.square, self._square, self.low_square)
+
+        self.gui_group.add(self.square, self._square)
 
 
 
@@ -46,18 +49,17 @@ class Environment(SceneBase):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print("Hello")
             if event.type == pygame.QUIT:
-                self.termianate()
+                self.terminate()
 
     def update(self):
         pass
 
     def render(self):
         self.gui_group.draw(self.surface)
+        self._square.on_hover((self._square.highlight))
         self._square.render_text('Hello')
         self._square.render_text('World',((20,20)))
         self._square.render_text('!',((40,40)))
-        self.
 
-        self.low_square.render_text('This is a really long string')
 
         pygame.display.flip()

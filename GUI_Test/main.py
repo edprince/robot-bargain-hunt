@@ -1,6 +1,7 @@
 import pygame
 import environment
 
+
 def main(fps, scene):
     pygame.init()
     done = False
