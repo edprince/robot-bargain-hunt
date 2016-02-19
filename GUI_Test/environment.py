@@ -5,11 +5,6 @@ from constants import *
 import sys
 
 
-
-#SCREENWIDTH = 500
-#SCREENHEIGHT = 500
-#SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
-
 class SceneBase():
 
     def __init__(self):
@@ -34,13 +29,19 @@ class Environment(SceneBase):
         self.surface = graphics.SCREEN
         #self.surface.fill((RED))
         self.gui_group = pygame.sprite.Group()
-        bckImg = pygame.image.load('map1.png').convert_alpha()
+        bckImg = pygame.image.load('map1.png')
         self.surface.blit(bckImg, (0,0))
-        self.square = GuiBase.VisualElement(800,450,200,100, (230,230,230))
         self._square = GuiBase.ClickableElement(70,70,70,70, (150,150,150))
+        self.start = GuiBase.ClickableElement(477, 646, 180, 100, (0,204,0))
+        self.exit = GuiBase.ClickableElement(954, 646, 180, 100, (204, 0, 0))
+        #self.title = GuiBase.TextElement("NAME OF THE GAME", 80, (300, 200))
+        #title = pygame.image.load('title.png')
+        #self.surface.blit(title, (300, 100)) ### desperate measures, using pic with not background instead of pure text
 
 
-        self.gui_group.add(self.square, self._square)
+
+
+        self.gui_group.add(self.start,self.exit)
 
 
 
@@ -56,10 +57,11 @@ class Environment(SceneBase):
 
     def render(self):
         self.gui_group.draw(self.surface)
-        self._square.on_hover((self._square.highlight))
-        self._square.render_text('Hello')
-        self._square.render_text('World',((20,20)))
-        self._square.render_text('!',((40,40)))
+        self.start.on_hover((self.start.highlight))
+        self.exit.on_hover((self.exit.highlight))
+        self.start.render_text('Start')
+        self.exit.render_text('Exit')
+
 
 
         pygame.display.flip()
