@@ -47,7 +47,7 @@ class Environment(SceneBase):
             if display:
                 self.surface.blit(startTheGame, ((500),700))
             pygame.display.flip()
-            pygame.time.wait(1000)
+            pygame.time.wait(500)
         #self.start = GuiBase.ClickableElement(477, 646, 180, 100, (0,204,0)) #Start button
         #self.exit = GuiBase.ClickableElement(954, 646, 180, 100, (204, 0, 0)) #Exit button
 
