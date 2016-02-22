@@ -12,7 +12,6 @@ import random
 #import psyco 
 #psyco.full()
 objs = [] 
-flags = FULLSCREEN | DOUBLEBUF
 
 
 def calculate_distance(x1, y1, x2, y2):
@@ -51,6 +50,9 @@ objs.extend((item_1, item_2, item_3, item_4, item_5))
 
 pygame.init()
 #Initialize pygame dependent variables
+flags = FULLSCREEN | DOUBLEBUF
+DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE), flags)
+DISPLAYSURF.set_alpha(None)
 player = pygame.image.load('assets/player-idea.png')
 #pygame.display.set_mode((WIDTH * TILESIZE, HEIGHT * TILESIZE))
 playerPos = [WIDTH / 2, HEIGHT / 2]
@@ -70,7 +72,6 @@ while True:
     oY = game_items[item_1].location[1]
       
     #Generate random direction, move, calculate if closer, move again.
-    '''
     newDistance = calculate_distance(pX, pY, oX, oY)
     if not first_it:
         print(newDistance, oldDistance)
@@ -85,7 +86,6 @@ while True:
         playerPos[d] += v
         
     oldDistance = calculate_distance(pX, pY, oX, oY)
-    '''
     
     for row in range(HEIGHT):
         for column in range(WIDTH):

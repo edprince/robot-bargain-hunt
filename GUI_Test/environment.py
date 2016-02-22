@@ -23,22 +23,20 @@ class SceneBase():
         pygame.quit()
 
 class Environment(SceneBase):
-
+    
     def __init__(self):
         SceneBase.__init__(self)
         self.surface = graphics.SCREEN
-        #self.surface.fill((RED))
         self.gui_group = pygame.sprite.Group()
-        bckImg = pygame.image.load('map1.png')
-        self.surface.blit(bckImg, (0,0))
+        pygame.font.init()   # font initialisation
+        myfont = pygame.font.Font('font1.ttf', 65)  # choosing the font  
+        title = myfont.render("IT BELONGS IN THE MUSEUM !", 1, (0,0,0))   # rendering the text, title and the colour
+        bckImg = pygame.image.load('map1.png') # loading an image of the map
+        self.surface.blit(bckImg, (0,0))  #blitting the background
+        self.surface.blit(title, (375,80)) #blitting the title
         self._square = GuiBase.ClickableElement(70,70,70,70, (150,150,150))
-        self.start = GuiBase.ClickableElement(477, 646, 180, 100, (0,204,0))
-        self.exit = GuiBase.ClickableElement(954, 646, 180, 100, (204, 0, 0))
-        #self.title = GuiBase.TextElement("NAME OF THE GAME", 80, (300, 200))
-        #title = pygame.image.load('title.png')
-        #self.surface.blit(title, (300, 100)) ### desperate measures, using pic with not background instead of pure text
-
-
+        self.start = GuiBase.ClickableElement(477, 646, 180, 100, (0,204,0)) #Start button
+        self.exit = GuiBase.ClickableElement(954, 646, 180, 100, (204, 0, 0)) #Exit button
 
 
         self.gui_group.add(self.start,self.exit)
