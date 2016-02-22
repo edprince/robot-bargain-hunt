@@ -47,7 +47,7 @@ class VisualElement(pygame.sprite.DirtySprite):
             self.text.position = (0,0)
 
         self.text.text = text
-        font_object = pygame.font.Font( 'font1.ttf', 75)
+        font_object = pygame.font.Font( 'font1.ttf', 35)
         rendered_text = font_object.render(self.text.text, False, ((0,0,0)))
         self.image.blit(rendered_text, self.text.position)
 
@@ -74,3 +74,4 @@ class ClickableElement(VisualElement):
 
     def on_click(self, function):
         pass
+
