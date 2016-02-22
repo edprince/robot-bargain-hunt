@@ -32,9 +32,12 @@ class Environment(SceneBase):
         pygame.font.init()   # font initialisation
         myfont = pygame.font.Font('font1.ttf', 65)  # choosing the font
         myfont1 = pygame.font.Font('font1.ttf', 40)
+        myfont2 = pygame.font.Font('font1.ttf', 50)
         title = myfont.render("IT BELONGS IN THE MUSEUM !", 1, (0,0,0))
         startTheGame = myfont1.render("PRESS 'ENTER' TO START", 1, (0,255,0))
+        startTheGameOuter = myfont2.render("PRESS 'ENTER' TO START", 1, (0,0,0))
         self.surface.blit(bckImg, (0,0))  #blitting the background
+        self.surface.blit(startTheGameOuter, (800, 300))
         self.surface.blit(startTheGame, (800, 300))
         self.surface.blit(title, (375,80)) #blitting the title
 
