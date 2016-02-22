@@ -3,41 +3,59 @@ import time
 import random
  
 pygame.init()
- 
+
 display_width = 800
 display_height = 600
  
 black = (0,0,0)
 white = (255,255,255)
-red = (255,0,0)
-green = (0,200,0)
-Bright_green = (0,255,0)
+
 red = (200,0,0)
+green = (0,200,0)
+
 bright_red = (255,0,0)
- 
-block_color = (53,115,255)
- 
+bright_green = (0,255,0)
  
 gameDisplay = pygame.display.set_mode((display_width,display_height))
-pygame.display.set_caption('THE GAME NAME')
+pygame.display.set_caption('Game Name')
 clock = pygame.time.Clock()
  
 def text_objects(text, font):
-    textSurface = font.render(text, True, black)
+    textSurface = font.render(text, True, white)
     return textSurface, textSurface.get_rect()
- 
+
+def button(msg,x,y,w,h,ic,ac,action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+
+    if x+w > mouse[0] > x and y+h > mouse[1] > y:
+        pygame.draw.rect(gameDisplay, ac,(x,y,w,h))
+        if click[0] == 1 and action != None:
+            action()         
+    else:
+        pygame.draw.rect(gameDisplay, ic,(x,y,w,h))
+    smallText = pygame.font.SysFont("comicsansms",20)
+    textSurf, textRect = text_objects(msg, smallText)
+    textRect.center = ( (x+(w/2)), (y+(h/2)) )
+    gameDisplay.blit(textSurf, textRect)
+    
+
+def quitgame():
+    pygame.quit()
+    quit()
+    
 def game_intro():
 
     intro = True
 
     while intro:
         for event in pygame.event.get():
-            print(event)
+            
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
                 
-        gameDisplay.fill(white)
+        gameDisplay.fill(black)
         largeText = pygame.font.Font('freesansbold.ttf',50)
         TextSurf, TextRect = text_objects("Game Over", largeText)
         TextRect.center = ((400,50))
@@ -48,31 +66,15 @@ def game_intro():
         TextRect.center = ((150,250))
         gameDisplay.blit(TextSurf, TextRect)
 
-        mouse = pygame.mouse.get_pos()
+        button("Again!",150,450,100,50,green,bright_green)
+        button("Quit",550,450,100,50,red,bright_red,quitgame)
 
-        if 150+100 > mouse[0] > 150 and 520+50 > mouse[1] > 520:
-            pygame.draw.rect(gameDisplay, Bright_green,(150,520,100,50))
-        else:
-            pygame.draw.rect(gameDisplay, green,(150,520,100,50))
-            
-        smallText = pygame.font.Font("freesansbold.ttf",20)
-        textSurf, textRect = text_objects("Again!", smallText)
-        textRect.center = ( (150+(100/2)), (520+(50/2)) )
-        gameDisplay.blit(textSurf, textRect)
-
-        if 650+100 > mouse[0] > 650 and 520+50 > mouse[1] > 520:
-            pygame.draw.rect(gameDisplay, bright_red,(650,520,100,50))
-        else:
-            pygame.draw.rect(gameDisplay, red,(650,520,100,50))
-            
-        smallText = pygame.font.Font("freesansbold.ttf",20)
-        textSurf, textRect = text_objects("Quit!", smallText)
-        textRect.center = ( (650+(100/2)), (520+(50/2)) )
-        gameDisplay.blit(textSurf, textRect)
-        
         pygame.display.update()
         clock.tick(15)
         
+        pygame.display.update()
+        clock.tick(60)
+
 game_intro()
 pygame.quit()
 quit()
