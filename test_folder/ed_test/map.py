@@ -57,7 +57,7 @@ def parse_map(data):
             tilemap_tmp.append(WOOD)
         elif line == '/':
             tilemap.append(tilemap_tmp)
-            print tilemap_tmp
+            #print tilemap_tmp
             tilemap_tmp = []
             
 
@@ -140,7 +140,7 @@ while True:
                 playerPos[1] += 1
             elif (event.key == K_UP) and ((playerPos[1] - 1) >= 0) and tilemap[playerPos[1] - 1][playerPos[0]] != 4:
                 playerPos[1] -= 1
-            print tilemap[playerPos[1]][playerPos[0]]
+            #print tilemap[playerPos[1]][playerPos[0]]
 
 
     #Draw tiles

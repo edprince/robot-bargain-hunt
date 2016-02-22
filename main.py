@@ -67,6 +67,7 @@ while True:
         elif (event.type == USEREVENT):
             print("GAME END")
             game_running = False
+            #run scoreboard code
             
             
     if (game_running):
@@ -81,6 +82,7 @@ while True:
             #Collect item
             print("FOUND ITEM")
         if (first_it or newDistance > oldDistance):
+            #d = direction, v = value
             [d, v] = random_move()
             lastMove = (d, v)
             first_it = False
