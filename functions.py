@@ -33,3 +33,22 @@ def random_move():
 
 
     
+def search_objects(x, v):
+    '''Search list for specific value
+
+    Function takes a sorted list of integers (x) and finds a specific value (v),
+    using a binary search'''
+    found = False
+    first = 0
+    last = len(x) - 1
+    while ((not found) and first <= last):
+        mid = (first + last) // 2
+        if x[mid] == v:
+            found = True
+        else:
+            if v < x[mid]:
+                last = mid - 1
+            else:
+                first = mid + 1
+        return found
+            
