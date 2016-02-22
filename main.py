@@ -21,7 +21,7 @@ WIDTH = 50
 HEIGHT = 30
 TILESIZE = 32
 BLUE = (0, 0, 255)
-TIME = 30
+TIME = 5000
 #Initialize items
 
 item_1 = pygame.image.load('assets/crown.png')
@@ -57,10 +57,9 @@ playerPos = [WIDTH / 2, HEIGHT / 2]
 clock = pygame.time.Clock()
 first_it = True
 game_running = True
-
+pygame.time.set_timer(USEREVENT, TIME)
     
-while True:
-    pygame.time.set_timer(USEREVENT, 900)
+while True:   
     for event in pygame.event.get():
         if event.type==QUIT:
             pygame.quit()
@@ -99,7 +98,6 @@ while True:
         
         for i in game_items:
             DISPLAYSURF.blit(item_1, (game_items[i].location[0] * TILESIZE, game_items[i].location[1] * TILESIZE))
-            pass
     
         pygame.display.update()
         clock.tick(60)
