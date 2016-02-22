@@ -47,7 +47,9 @@ objs.extend((item_1, item_2, item_3, item_4, item_5))
 #    print(sorted_list[i].name)
 
 pygame.init()
-DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE))
+flags = FULLSCREEN | DOUBLEBUF
+DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE), flags)
+DISPLAYSURF.set_alpha(None)
 player = pygame.image.load('assets/player-idea.png')
 pygame.display.set_mode((WIDTH * TILESIZE, HEIGHT * TILESIZE))
 playerPos = [WIDTH / 2, HEIGHT / 2]
