@@ -24,7 +24,7 @@ HEIGHT = 30
 TILESIZE = 32
 BLUE = (0, 0, 255)
 #Initialize items
-DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE, flags))
+#DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE, flags))
 
 item_1 = 1
 item_2 = 2
@@ -90,7 +90,7 @@ while True:
     for row in range(HEIGHT):
         for column in range(WIDTH):
             DISPLAYSURF.fill((0, 0, 0))
-           # DISPLAYSURF.blit(player, (playerPos[0] * TILESIZE,(playerPos[1]) * TILESIZE))
+            DISPLAYSURF.blit(player, (playerPos[0] * TILESIZE,(playerPos[1]) * TILESIZE))
         
     for i in game_items:
         pygame.draw.circle(DISPLAYSURF, BLUE, (game_items[i].location[0] * 32, game_items[i].location[1] * 32), 20, 0)
