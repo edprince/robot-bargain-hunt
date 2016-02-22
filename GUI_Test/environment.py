@@ -34,13 +34,20 @@ class Environment(SceneBase):
         myfont1 = pygame.font.Font('font1.ttf', 40)
         myfont2 = pygame.font.Font('font1.ttf', 50)
         title = myfont.render("IT BELONGS IN THE MUSEUM !", 1, (0,0,0))
-        startTheGame = myfont1.render("PRESS 'ENTER' TO START", 1, (0,255,0))
+        startTheGame = myfont1.render("PRESS 'ENTER' TO START", 1, (0,200,0))
         startTheGameOuter = myfont2.render("PRESS 'ENTER' TO START", 1, (0,0,0))
-        self.surface.blit(bckImg, (0,0))  #blitting the background
-        self.surface.blit(startTheGameOuter, (800, 300))
-        self.surface.blit(startTheGame, (800, 300))
-        self.surface.blit(title, (375,80)) #blitting the title
+        #self.surface.blit(startTheGameOuter, (800, 300))
+        #self.surface.blit(startTheGame, (800, 300))
 
+        display = True
+        while pygame.time.get_ticks() < 10000:
+            self.surface.blit(bckImg, (0,0))  #blitting the background
+            self.surface.blit(title, (375,80)) #blitting the title
+            display = not display
+            if display:
+                self.surface.blit(startTheGame, ((500),700))
+            pygame.display.flip()
+            pygame.time.wait(1000)
         #self.start = GuiBase.ClickableElement(477, 646, 180, 100, (0,204,0)) #Start button
         #self.exit = GuiBase.ClickableElement(954, 646, 180, 100, (204, 0, 0)) #Exit button
 
