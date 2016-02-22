@@ -3,16 +3,16 @@ import pygame
 
 class TextElement(pygame.font.Font):
 
-    def __init__(self, text = 'Default', size = '12', position = (0,0)):
+        def __init__(self, text = 'Default', size = '12', position = (0,0)):
 
-        self.text = text
-        self.size = size
-        self.position = position
-
-
+            self.text = text
+            self.size = size
+            self.position = position
 
 
-class VisualElement(pygame.sprite.Sprite):
+
+
+class VisualElement(pygame.sprite.DirtySprite):
     """ The Class for most GUI elements.
     x, y, width, height = int
     colour = tuple(int, int, int)
@@ -20,7 +20,7 @@ class VisualElement(pygame.sprite.Sprite):
 
     def __init__(self, x, y, width, height, colour):
 
-        pygame.sprite.Sprite.__init__(self)
+        pygame.sprite.DirtySprite.__init__(self)
         self.width = width
         self.height = height
         self.colour = colour
@@ -33,21 +33,21 @@ class VisualElement(pygame.sprite.Sprite):
         self.rect.y = y
 
     def highlight(self):
-        highlighted= [x+30 for x in self.colour if x < 225]
+        highlighted= [x+50 for x in self.colour if x < 225]
         self.image.fill(highlighted)
 
     def lowlight(self):
-        lowlighted = [x-30 for x in self.colour if x > 30]
+        lowlighted = [x-50 for x in self.colour if x > 30]
         self.image.fill(lowlighted)
 
-    def render_text(self, text, position=False):
+    def render_text(self, text, position = False):
         if position:
             self.text.position = position
         else:
             self.text.position = (0,0)
 
         self.text.text = text
-        font_object = pygame.font.Font(None, 20)
+        font_object = pygame.font.Font( 'font1.ttf', 75)
         rendered_text = font_object.render(self.text.text, False, ((0,0,0)))
         self.image.blit(rendered_text, self.text.position)
 
@@ -60,7 +60,7 @@ class VisualElement(pygame.sprite.Sprite):
 
 
 class ClickableElement(VisualElement):
-    """ Class made for mouse interaction such as button  """
+    """ Class made for mouse interaction such as button """
 
 
     def __init__(self, x, y, width, height, colour):

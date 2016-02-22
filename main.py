@@ -1,6 +1,6 @@
 #Code here independent of Pygame currently, keeping compatibility options open
 #Current ouput should be the list of items in descending order
-from __future__ import division
+#from __future__ import division
 
 from functions import *
 from classes import *
@@ -8,7 +8,11 @@ import pygame
 from pygame.locals import *
 import sys
 import math
-objs = []
+import random
+#import psyco 
+#psyco.full()
+objs = [] 
+
 
 def calculate_distance(x1, y1, x2, y2):
     width = math.sqrt((x2 - x1)**2)
@@ -20,16 +24,17 @@ HEIGHT = 30
 TILESIZE = 32
 BLUE = (0, 0, 255)
 #Initialize items
+#DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE, flags))
 
-item_1 = 1
-item_2 = 2
-item_3 = 3
-item_4 = 4
-item_5 = 5
+item_1 = pygame.image.load('assets/crown.png')
+item_2 = pygame.image.load('assets/crown.png')
+item_3 = pygame.image.load('assets/crown.png')
+item_4 = pygame.image.load('assets/crown.png')
+item_5 = pygame.image.load('assets/crown.png')
 
 
 game_items = {    
-    item_1: Item('coin', 2, (10, 4), 'treasure', 10),
+    item_1: Item('coin', 2, (10, 10), 'treasure', 10),
     item_2: Item('crown', 200, (14, 1), 'treasure', 2),
     item_3: Item('spear', 30, (12, 19), 'weapon', 5),
     item_4: Item('sword', 25, (3, 5), 'weapon', 4),
@@ -44,37 +49,51 @@ objs.extend((item_1, item_2, item_3, item_4, item_5))
 #    print(sorted_list[i].name)
 
 pygame.init()
-DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE))
+#Initialize pygame dependent variables
+flags = FULLSCREEN | DOUBLEBUF
+DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE), flags)
+DISPLAYSURF.set_alpha(None)
 player = pygame.image.load('assets/player-idea.png')
-pygame.display.set_mode((WIDTH * TILESIZE, HEIGHT * TILESIZE))
+#pygame.display.set_mode((WIDTH * TILESIZE, HEIGHT * TILESIZE))
 playerPos = [WIDTH / 2, HEIGHT / 2]
 clock = pygame.time.Clock()
-
+first_it = True
 
     
 while True:
-    pX = playerPos[0] #25
-    pY = playerPos[1]
-    oX = game_items[item_1].location[0] #10
-    oY = game_items[item_1].location[1]
-    currentDistance = calculate_distance
-    #Generate random direction, move, calculate if closer, move again.
-    random_move():
-        
-    
-    #print(calculate_distance(pX, pY, oX, oY))
     for event in pygame.event.get():
         if event.type==QUIT:
             pygame.quit()
             sys.exit
 
+    pX = playerPos[0] #25
+    pY = playerPos[1]
+    oX = game_items[item_1].location[0] #10
+    oY = game_items[item_1].location[1]
+      
+    #Generate random direction, move, calculate if closer, move again.
+    newDistance = calculate_distance(pX, pY, oX, oY)
+    if not first_it:
+        print(newDistance, oldDistance)
+    if (first_it or newDistance > oldDistance):
+        [d, v] = random_move()
+        lastMove = (d, v)
+        first_it = False
+        playerPos[d] += v
+        print('new move')
+    else:
+        #repeat last move
+        playerPos[d] += v
+        
+    oldDistance = calculate_distance(pX, pY, oX, oY)
+    
     for row in range(HEIGHT):
         for column in range(WIDTH):
+            DISPLAYSURF.fill((0, 0, 0))
             DISPLAYSURF.blit(player, (playerPos[0] * TILESIZE,(playerPos[1]) * TILESIZE))
-
+        
     for i in game_items:
-        #print(game_items[i].location)
-        pygame.draw.circle(DISPLAYSURF, BLUE, (game_items[i].location[0] * 32, game_items[i].location[1] * 32), 20, 0)
+        pygame.draw.circle(game_items[i], (game_items[i].location[0] * 32, game_items[i].location[1] * 32))
 
     pygame.display.update()
-    clock.tick(40)
+    #clock.tick(60)
