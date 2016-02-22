@@ -11,6 +11,7 @@ class TextElement(pygame.font.Font):
 
 
 
+
 class VisualElement(pygame.sprite.DirtySprite):
     """ The Class for most GUI elements.
     x, y, width, height = int

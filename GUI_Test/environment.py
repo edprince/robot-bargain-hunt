@@ -27,18 +27,16 @@ class Environment(SceneBase):
     def __init__(self):
         SceneBase.__init__(self)
         self.surface = graphics.SCREEN
-        #self.surface.fill((RED))
         self.gui_group = pygame.sprite.Group()
+        pygame.font.init()
+        myfont = pygame.font.Font('font1.ttf', 65)
+        title = myfont.render("IT BELONGS IN THE MUSEUM !", 1, (0,0,0))
         bckImg = pygame.image.load('map1.png')
         self.surface.blit(bckImg, (0,0))
+        self.surface.blit(title, (375,80))
         self._square = GuiBase.ClickableElement(70,70,70,70, (150,150,150))
         self.start = GuiBase.ClickableElement(477, 646, 180, 100, (0,204,0))
         self.exit = GuiBase.ClickableElement(954, 646, 180, 100, (204, 0, 0))
-        #self.title = GuiBase.TextElement("NAME OF THE GAME", 80, (300, 200))
-        #title = pygame.image.load('title.png')
-        #self.surface.blit(title, (300, 100)) ### desperate measures, using pic with not background instead of pure text
-
-
 
 
         self.gui_group.add(self.start,self.exit)
