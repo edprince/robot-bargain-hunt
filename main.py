@@ -1,6 +1,4 @@
-#Code here independent of Pygame currently, keeping compatibility options open
 #Current ouput should be the list of items in descending order
-#from __future__ import division
 
 from functions import *
 from classes import *
@@ -23,14 +21,16 @@ WIDTH = 50
 HEIGHT = 30
 TILESIZE = 32
 BLUE = (0, 0, 255)
+TIME = 5000
 #Initialize items
-#DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE, flags))
 
 item_1 = pygame.image.load('assets/crown.png')
 item_2 = pygame.image.load('assets/crown.png')
 item_3 = pygame.image.load('assets/crown.png')
 item_4 = pygame.image.load('assets/crown.png')
 item_5 = pygame.image.load('assets/crown.png')
+
+SAND = pygame.image.load('assets/sand.png')
 
 
 game_items = {    
@@ -41,16 +41,14 @@ game_items = {
     item_5: Item('pot', 10, (40, 8), 'tool', 10)
     }
 
-print(game_items[item_1].location[0])
+#print(game_items[item_1].location[0])
 
 objs.extend((item_1, item_2, item_3, item_4, item_5))
-#sorted_list = sort_objects(objs)
-#for i in range(len(sorted_list)):
-#    print(sorted_list[i].name)
+
 
 pygame.init()
 #Initialize pygame dependent variables
-flags = FULLSCREEN | DOUBLEBUF
+flags = DOUBLEBUF
 DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE), flags)
 DISPLAYSURF.set_alpha(None)
 player = pygame.image.load('assets/player-idea.png')
@@ -58,42 +56,48 @@ player = pygame.image.load('assets/player-idea.png')
 playerPos = [WIDTH / 2, HEIGHT / 2]
 clock = pygame.time.Clock()
 first_it = True
-
+game_running = True
+pygame.time.set_timer(USEREVENT, TIME)
     
-while True:
+while True:   
     for event in pygame.event.get():
         if event.type==QUIT:
             pygame.quit()
             sys.exit
-
-    pX = playerPos[0] #25
-    pY = playerPos[1]
-    oX = game_items[item_1].location[0] #10
-    oY = game_items[item_1].location[1]
+        elif (event.type == USEREVENT):
+            print("GAME END")
+            game_running = False
+            
+            
+    if (game_running):
+        pX = playerPos[0] #25
+        pY = playerPos[1]
+        oX = game_items[item_1].location[0] #10
+        oY = game_items[item_1].location[1]
       
-    #Generate random direction, move, calculate if closer, move again.
-    newDistance = calculate_distance(pX, pY, oX, oY)
-    if not first_it:
-        print(newDistance, oldDistance)
-    if (first_it or newDistance > oldDistance):
-        [d, v] = random_move()
-        lastMove = (d, v)
-        first_it = False
-        playerPos[d] += v
-        print('new move')
-    else:
-        #repeat last move
-        playerPos[d] += v
+        #Generate random direction, move, calculate if closer, move again.
+        newDistance = calculate_distance(pX, pY, oX, oY)
+        if (pX == oX and pY == oY):
+            #Collect item
+            print("FOUND ITEM")
+        if (first_it or newDistance > oldDistance):
+            [d, v] = random_move()
+            lastMove = (d, v)
+            first_it = False
+            playerPos[d] += v
+        else:
+            #repeat last move
+            playerPos[d] += v
         
-    oldDistance = calculate_distance(pX, pY, oX, oY)
+        oldDistance = calculate_distance(pX, pY, oX, oY)
     
-    for row in range(HEIGHT):
-        for column in range(WIDTH):
-            DISPLAYSURF.fill((0, 0, 0))
-            DISPLAYSURF.blit(player, (playerPos[0] * TILESIZE,(playerPos[1]) * TILESIZE))
+        for row in range(HEIGHT):
+            for column in range(WIDTH):
+                DISPLAYSURF.blit(SAND, (column * TILESIZE, row * TILESIZE))
+                DISPLAYSURF.blit(player, (playerPos[0] * TILESIZE,(playerPos[1]) * TILESIZE))
         
-    for i in game_items:
-        pygame.draw.circle(game_items[i], (game_items[i].location[0] * 32, game_items[i].location[1] * 32))
-
-    pygame.display.update()
-    #clock.tick(60)
+        for i in game_items:
+            DISPLAYSURF.blit(item_1, (game_items[i].location[0] * TILESIZE, game_items[i].location[1] * TILESIZE))
+    
+        pygame.display.update()
+        clock.tick(60)
