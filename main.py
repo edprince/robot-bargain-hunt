@@ -26,11 +26,11 @@ BLUE = (0, 0, 255)
 #Initialize items
 #DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE, flags))
 
-item_1 = 1
-item_2 = 2
-item_3 = 3
-item_4 = 4
-item_5 = 5
+item_1 = pygame.image.load('assets/crown.png')
+item_2 = pygame.image.load('assets/crown.png')
+item_3 = pygame.image.load('assets/crown.png')
+item_4 = pygame.image.load('assets/crown.png')
+item_5 = pygame.image.load('assets/crown.png')
 
 
 game_items = {    
@@ -93,7 +93,7 @@ while True:
             DISPLAYSURF.blit(player, (playerPos[0] * TILESIZE,(playerPos[1]) * TILESIZE))
         
     for i in game_items:
-        pygame.draw.circle(DISPLAYSURF, BLUE, (game_items[i].location[0] * 32, game_items[i].location[1] * 32), 20, 0)
+        pygame.draw.circle(game_items[i], (game_items[i].location[0] * 32, game_items[i].location[1] * 32))
 
     pygame.display.update()
     #clock.tick(60)
