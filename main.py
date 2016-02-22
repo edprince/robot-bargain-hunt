@@ -9,20 +9,23 @@ from pygame.locals import *
 import sys
 import math
 import random
-objs = []
+#import psyco 
+#psyco.full()
+objs = [] 
+flags = FULLSCREEN | DOUBLEBUF
+
 
 def calculate_distance(x1, y1, x2, y2):
     width = math.sqrt((x2 - x1)**2)
     height = math.sqrt((y2 - y1)**2)
     return math.sqrt(height**2 + width**2)
 
-
-
 WIDTH = 50
 HEIGHT = 30
 TILESIZE = 32
 BLUE = (0, 0, 255)
 #Initialize items
+DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE, flags))
 
 item_1 = 1
 item_2 = 2
@@ -47,28 +50,27 @@ objs.extend((item_1, item_2, item_3, item_4, item_5))
 #    print(sorted_list[i].name)
 
 pygame.init()
-DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE))
+#Initialize pygame dependent variables
 player = pygame.image.load('assets/player-idea.png')
-pygame.display.set_mode((WIDTH * TILESIZE, HEIGHT * TILESIZE))
+#pygame.display.set_mode((WIDTH * TILESIZE, HEIGHT * TILESIZE))
 playerPos = [WIDTH / 2, HEIGHT / 2]
-#clock = pygame.time.Clock()
+clock = pygame.time.Clock()
 first_it = True
 
     
 while True:
-    #print(calculate_distance(pX, pY, oX, oY))
     for event in pygame.event.get():
         if event.type==QUIT:
             pygame.quit()
             sys.exit
 
-    
-           
     pX = playerPos[0] #25
     pY = playerPos[1]
     oX = game_items[item_1].location[0] #10
     oY = game_items[item_1].location[1]
       
+    #Generate random direction, move, calculate if closer, move again.
+    '''
     newDistance = calculate_distance(pX, pY, oX, oY)
     if not first_it:
         print(newDistance, oldDistance)
@@ -83,19 +85,14 @@ while True:
         playerPos[d] += v
         
     oldDistance = calculate_distance(pX, pY, oX, oY)
-    
-            
-    #Generate random direction, move, calculate if closer, move again.
-        
+    '''
     
     for row in range(HEIGHT):
         for column in range(WIDTH):
             DISPLAYSURF.fill((0, 0, 0))
-            DISPLAYSURF.blit(player, (playerPos[0] * TILESIZE,(playerPos[1]) * TILESIZE))
-            pass
+           # DISPLAYSURF.blit(player, (playerPos[0] * TILESIZE,(playerPos[1]) * TILESIZE))
         
     for i in game_items:
-        #print(game_items[i].location)
         pygame.draw.circle(DISPLAYSURF, BLUE, (game_items[i].location[0] * 32, game_items[i].location[1] * 32), 20, 0)
 
     pygame.display.update()
