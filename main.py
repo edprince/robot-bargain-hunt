@@ -6,14 +6,17 @@ from pygame.locals import *
 import sys
 import math
 import random
-objs = [] 
 
+objs = [] 
+time_input = int(raw_input("Enter a time: "))
+
+ASCENDING = False
 WIDTH = 50
 HEIGHT = 30
 TILESIZE = 32
 BLUE = (0, 0, 255)
-time_input = int(raw_input("Enter a time: "))
 TIME = time_input * 1000
+SAND = pygame.image.load('assets/sand.png')
 
 #Initialize items
 item_1 = pygame.image.load('assets/crown.png')
@@ -22,7 +25,6 @@ item_3 = pygame.image.load('assets/spearhead.png')
 item_4 = pygame.image.load('assets/bone1.png')
 item_5 = pygame.image.load('assets/key1.png')
 
-SAND = pygame.image.load('assets/sand.png')
 
 game_items = {    
     item_1: Item('coin', 2, (10, 10), 'treasure', 10, False),
@@ -37,7 +39,10 @@ items = [item_1, item_2, item_3, item_4, item_5]
 for i in range(len(game_items)):
     objs.append(game_items[items[i]])
 
-sorted_list = sort_objects(objs)
+if ASCENDING == True:
+    sorted_list = sort_objects(objs)
+else:
+    sorted_list = sort_objects(objs)[::-1]
 
 pygame.init()
 #Initialize pygame dependent variables
@@ -68,23 +73,12 @@ while True:
         pX = playerPos[0]
         pY = playerPos[1]
         #Code that gets coordinates for object being searched for
-        if searchingFor == 1:
-            oX = sorted_list[0].location[0]
-            oY = sorted_list[0].location[1]
-        elif searchingFor == 2:
-            oX = sorted_list[1].location[0]
-            oY = sorted_list[1].location[1]
-        elif searchingFor == 3:
-            oX = sorted_list[2].location[0]
-            oY = sorted_list[2].location[1]
-        elif searchingFor == 4:
-            oX = sorted_list[3].location[0]
-            oY = sorted_list[3].location[1]
-        elif searchingFor == 5:
-            oX = sorted_list[4].location[0]
-            oY = sorted_list[4].location[1]
-        else:
-            game_running = False
+        for i in range(1, len(game_items) + 1):
+            if searchingFor == i:
+                oX = sorted_list[i - 1].location[0]
+                oY = sorted_list[i - 1].location[1]
+            elif (i > len(game_items)):
+                game_running = False
       
         #Generate random direction, move, calculate if closer, move again.
         if (pX == oX and pY == oY):
