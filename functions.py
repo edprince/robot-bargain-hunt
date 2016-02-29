@@ -1,5 +1,6 @@
 #File for functions used throughout game
 import random
+import math
 
 def sort_objects(x):
     '''Order objects by value
