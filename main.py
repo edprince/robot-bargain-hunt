@@ -14,32 +14,37 @@ def sort_highlight(pX, pY, oX, oY):
     Takes 4 integers, position of item, and position of player'''
     pygame.draw.line(DISPLAYSURF, BLUE, (pX, pY), (oX, oY), 1)
     
-
 def start():
+    #Initialize variables
     objs = []
     collected_items = []
-    #time_input = int(raw_input("Enter a time: "))
-
+    rock_locations = []
+    bush_locations = []
+    water_locations = []
+    steps = 0
     ASCENDING = False
-    WIDTH = 50
-    HEIGHT = 30
+    WIDTH = 30
+    HEIGHT = 20
     TILESIZE = 32
     ROCK_DENSITY = 20
+    WATER_DENSITY = 10
     BLUE = (0, 0, 255)
     GREEN = (0, 255, 0)
     TIME = 50000
     SAND = pygame.image.load('assets/sand-new.png')
     STONE = pygame.image.load('assets/stone.png')
     BUSH = pygame.image.load('assets/bush.png')
+    WATER = pygame.image.load('assets/water32.png')
 
     #Initialize items
+    #Load image for items
     item_1 = pygame.image.load('assets/coin.png')
     item_2 = pygame.image.load('assets/crown.png')
     item_3 = pygame.image.load('assets/spearhead.png')
     item_4 = pygame.image.load('assets/bone2.png')
     item_5 = pygame.image.load('assets/key1.png')
 
-
+    #Make items instances of classes
     game_items = {
         item_1: Item('coin', 2, gen_coordinates(0, WIDTH, 0, HEIGHT), 'treasure', 10, False),
         item_2: Item('crown', 200, gen_coordinates(0, WIDTH, 0, HEIGHT), 'treasure', 2, False),
@@ -59,32 +64,55 @@ def start():
     else:
         sorted_list = sort_objects(objs)
 
+    #INITIALIZE PYGAME
+    #===============
     pygame.init()
-    rock_locations = []
-    bush_locations = []
     #Initialize pygame dependent variables
     flags = DOUBLEBUF
-    DISPLAYSURF = pygame.display.set_mode((40 + WIDTH*TILESIZE, HEIGHT*TILESIZE), flags)
-    DISPLAYSURF.set_alpha(None)
+    DISPLAYSURF = pygame.display.set_mode((60 + WIDTH*TILESIZE, HEIGHT*TILESIZE), flags)
     clock = pygame.time.Clock()
     player = pygame.image.load('assets/player-idea.png')
-    pygame.time.set_timer(USEREVENT, TIME)
     count = 0
+    pygame.time.set_timer(USEREVENT, TIME)
+    DISPLAYSURF.set_alpha(None)
 
+    #Build array of locations for randomly placed rocks and trees
+    #Bulk of this code is to increase likelihood of clumping nature
     for rows in range(WIDTH):
         for columns in range(HEIGHT):
-            if random.randrange(1000) < ROCK_DENSITY:
-                rock_locations.append([rows, columns])
+            if [rows + 1, columns] in water_locations or \
+                    [rows - 1, columns] in water_locations or \
+                    [rows, columns + 1] in water_locations or \
+                    [rows, columns - 1] in water_locations:
+                        if random.randrange(15) < WATER_DENSITY:
+                            water_locations.append([rows, columns])
+
+            elif (random.randrange(1000) > 1000 - WATER_DENSITY):
+                water_locations.append([rows, columns])
+            #water_locations = disperse(rows, columns, WATER_DENSITY, 15, water_locations) 
+
+            if [rows + 1, columns] in rock_locations or \
+                    [rows - 1, columns] in rock_locations or \
+                    [rows, columns + 1] in rock_locations or \
+                    [rows, columns - 1] in rock_locations:
+                        if random.randrange(80) < ROCK_DENSITY:
+                            rock_locations.append([rows, columns])
+
+            elif random.randrange(1000) < ROCK_DENSITY: rock_locations.append([rows, columns])
+
+            if [rows + 1, columns] in bush_locations or \
+                    [rows - 1, columns] in bush_locations or \
+                    [rows, columns + 1] in bush_locations or \
+                    [rows, columns - 1] in bush_locations:
+                        if random.randrange(80) < ROCK_DENSITY:
+                            bush_locations.append([rows, columns])
             elif (random.randrange(1000) > 1000 - ROCK_DENSITY):
                 bush_locations.append([rows, columns])
 
 
-
-
-    playerPos = [WIDTH / 2, HEIGHT / 2]
-
     #place player in the middle of the screen
-    first_it = True
+    playerPos = [WIDTH / 2, HEIGHT / 2]
+    first_it = True #Variable to keep track of first iteration
     game_running = True
     searchingFor = 1
 
@@ -115,18 +143,27 @@ def start():
                 for i in game_items:
                     if (pX == game_items[i].location[0] and pY == game_items[i].location[1]):
                         game_items[i].hidden = True
-                        collected_items.append(game_items[i])
+                        #collected_items.append(game_items[i])
+                        DISPLAYSURF.blit(i, (WIDTH * 37, HEIGHT))
                 print("FOUND ITEM")
                 searchingFor += 1
-        if (pX < oX):
-            playerPos[0] += 1
-        elif (pX > oX):
-            playerPos[0] -= 1
-        if (pY < oY):
-            playerPos[1] += 1
-        elif (pY > oY):
-            playerPos[1] -= 1
+            if searchingFor > len(game_items):
+                game_running = False
+                print("END IT NOW!")
+                start()
+            #Searching algorithm
+            if (pX < oX):
+                playerPos[0] += 1
+            elif (pX > oX):
+                playerPos[0] -= 1
+            if (pY < oY):
+                playerPos[1] += 1
+            elif (pY > oY):
+                playerPos[1] -= 1
+            steps += 1
+            print('Step: ', steps)
         
+        #Display player, sand, rocks and bushes
         for row in range(HEIGHT):
             for column in range(WIDTH):
                 DISPLAYSURF.blit(SAND, (column * TILESIZE, row * TILESIZE))
@@ -135,20 +172,20 @@ def start():
                     DISPLAYSURF.blit(STONE, (column * TILESIZE, row * TILESIZE))
                 if [column, row] in bush_locations:
                     DISPLAYSURF.blit(BUSH, (column * TILESIZE, row * TILESIZE))
-
+                if [column, row] in water_locations:
+                    DISPLAYSURF.blit(WATER, (column * TILESIZE, row * TILESIZE))
         
+        #Display items if not already collected
         for i in game_items:
             if (game_items[i].hidden != True):
                 DISPLAYSURF.blit(i, (game_items[i].location[0] * TILESIZE, game_items[i].location[1] * TILESIZE))
 
-
+        #Draw blue line to each uncollected item
         for i in game_items:
             if game_items[i].hidden != True:
                 pygame.draw.line(DISPLAYSURF, BLUE, (playerPos[0] * TILESIZE,
                     playerPos[1] * TILESIZE), (game_items[i].location[0] *
                         TILESIZE, game_items[i].location[1] * TILESIZE), 2)
-            #print(game_items[i].location[0])
-         
 
         pygame.display.update()
         clock.tick(60)

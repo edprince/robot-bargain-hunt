@@ -55,4 +55,27 @@ def search_objects(x, v):
             
 
 def gen_coordinates(xlower, xupper, ylower, yupper):
+    '''Generates a random x and y coordinate
+
+    Takes 4 integers, two lower and two upper ranges, returns tuple'''
     return (random.randrange(xlower, xupper), random.randrange(ylower, yupper))
+
+
+def disperse(rows, columns, density, upper_range, my_list):
+    '''Function returns array of locations
+
+    Takes probabilities and densities'''
+    if [rows + 1, columns] in my_list or \
+            [rows - 1, columns] in my_list or \
+            [rows, columns + 1] in my_list or \
+            [rows, columns - 1] in my_list or \
+            [rows + 1, columns + 1] in my_list or \
+            [rows + 1, columns - 1] in my_list or \
+            [rows - 1, columns + 1] in my_list or \
+            [rows - 1, columns - 1] in my_list:
+                if random.randrange(upper_range) < density:
+                    my_list.append([rows, columns])
+    elif (random.randrange(1000) > 1000 - density):
+        my_list.append([rows, columns])
+
+    return my_list
