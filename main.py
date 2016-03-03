@@ -17,33 +17,35 @@ def sort_highlight(pX, pY, oX, oY):
 
 def start():
     objs = []
+    collected_items = []
     #time_input = int(raw_input("Enter a time: "))
 
     ASCENDING = False
     WIDTH = 50
     HEIGHT = 30
     TILESIZE = 32
-    ROCK_DENSITY = 10
+    ROCK_DENSITY = 20
     BLUE = (0, 0, 255)
+    GREEN = (0, 255, 0)
     TIME = 50000
     SAND = pygame.image.load('assets/sand-new.png')
     STONE = pygame.image.load('assets/stone.png')
     BUSH = pygame.image.load('assets/bush.png')
 
     #Initialize items
-    item_1 = pygame.image.load('assets/crown.png')
-    item_2 = pygame.image.load('assets/sword.png')
+    item_1 = pygame.image.load('assets/coin.png')
+    item_2 = pygame.image.load('assets/crown.png')
     item_3 = pygame.image.load('assets/spearhead.png')
-    item_4 = pygame.image.load('assets/bone1.png')
+    item_4 = pygame.image.load('assets/bone2.png')
     item_5 = pygame.image.load('assets/key1.png')
 
 
     game_items = {
-        item_1: Item('coin', 2, (10, 10), 'treasure', 10, False),
-        item_2: Item('crown', 200, (14, 1), 'treasure', 2, False),
-        item_3: Item('spear', 30, (12, 19), 'weapon', 5, False),
-        item_4: Item('sword', 25, (3, 5), 'weapon', 4, False),
-        item_5: Item('pot', 10, (40, 8), 'tool', 10, False)
+        item_1: Item('coin', 2, gen_coordinates(0, WIDTH, 0, HEIGHT), 'treasure', 10, False),
+        item_2: Item('crown', 200, gen_coordinates(0, WIDTH, 0, HEIGHT), 'treasure', 2, False),
+        item_3: Item('spear', 30, gen_coordinates(0, WIDTH, 0, HEIGHT), 'weapon', 5, False),
+        item_4: Item('bone', 5, gen_coordinates(0, WIDTH, 0, HEIGHT), 'remains', 4, False),
+        item_5: Item('pot', 10, gen_coordinates(0, WIDTH, 0, HEIGHT), 'tool', 10, False)
         }
 
     #Sort the items
@@ -53,26 +55,27 @@ def start():
 
     print("Sorting into order")
     if ASCENDING == True:
-        sorted_list = sort_objects(objs)
-    else:
         sorted_list = sort_objects(objs)[::-1]
+    else:
+        sorted_list = sort_objects(objs)
 
     pygame.init()
     rock_locations = []
     bush_locations = []
     #Initialize pygame dependent variables
     flags = DOUBLEBUF
-    DISPLAYSURF = pygame.display.set_mode((WIDTH*TILESIZE, HEIGHT*TILESIZE + 40), flags)
+    DISPLAYSURF = pygame.display.set_mode((40 + WIDTH*TILESIZE, HEIGHT*TILESIZE), flags)
     DISPLAYSURF.set_alpha(None)
     clock = pygame.time.Clock()
     player = pygame.image.load('assets/player-idea.png')
     pygame.time.set_timer(USEREVENT, TIME)
+    count = 0
 
     for rows in range(WIDTH):
         for columns in range(HEIGHT):
             if random.randrange(1000) < ROCK_DENSITY:
                 rock_locations.append([rows, columns])
-            elif (random.randrange(1000) > 990):
+            elif (random.randrange(1000) > 1000 - ROCK_DENSITY):
                 bush_locations.append([rows, columns])
 
 
@@ -112,6 +115,7 @@ def start():
                 for i in game_items:
                     if (pX == game_items[i].location[0] and pY == game_items[i].location[1]):
                         game_items[i].hidden = True
+                        collected_items.append(game_items[i])
                 print("FOUND ITEM")
                 searchingFor += 1
         if (pX < oX):
@@ -137,14 +141,15 @@ def start():
             if (game_items[i].hidden != True):
                 DISPLAYSURF.blit(i, (game_items[i].location[0] * TILESIZE, game_items[i].location[1] * TILESIZE))
 
+
         for i in game_items:
             if game_items[i].hidden != True:
                 pygame.draw.line(DISPLAYSURF, BLUE, (playerPos[0] * TILESIZE,
                     playerPos[1] * TILESIZE), (game_items[i].location[0] *
                         TILESIZE, game_items[i].location[1] * TILESIZE), 2)
             #print(game_items[i].location[0])
-    
+         
+
         pygame.display.update()
         clock.tick(60)
-
 start()

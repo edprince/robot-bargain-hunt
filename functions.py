@@ -53,3 +53,6 @@ def search_objects(x, v):
                 first = mid + 1
         return found
             
+
+def gen_coordinates(xlower, xupper, ylower, yupper):
+    return (random.randrange(xlower, xupper), random.randrange(ylower, yupper))
