@@ -22,9 +22,12 @@ def start():
     bush_locations = []
     water_locations = []
     steps = 0
+    count = 0
+    value = 0
     ASCENDING = False
     WIDTH = 30
     HEIGHT = 20
+    INV_WIDTH = 5
     TILESIZE = 32
     ROCK_DENSITY = 20
     WATER_DENSITY = 10
@@ -35,6 +38,7 @@ def start():
     STONE = pygame.image.load('assets/stone.png')
     BUSH = pygame.image.load('assets/bush.png')
     WATER = pygame.image.load('assets/water32.png')
+    BG = pygame.image.load('assets/bg.png')
 
     #Initialize items
     #Load image for items
@@ -69,12 +73,16 @@ def start():
     pygame.init()
     #Initialize pygame dependent variables
     flags = DOUBLEBUF
-    DISPLAYSURF = pygame.display.set_mode((60 + WIDTH*TILESIZE, HEIGHT*TILESIZE), flags)
+    DISPLAYSURF = pygame.display.set_mode((INV_WIDTH * TILESIZE + WIDTH*TILESIZE, HEIGHT*TILESIZE), flags)
     clock = pygame.time.Clock()
     player = pygame.image.load('assets/player-idea.png')
-    count = 0
     pygame.time.set_timer(USEREVENT, TIME)
     DISPLAYSURF.set_alpha(None)
+    pygame.font.init()
+    default_font = pygame.font.get_default_font()
+    font_renderer = pygame.font.Font(default_font, 19)
+
+    inv_label = font_renderer.render("Inventory", 1, (255, 255, 255))
 
     #Build array of locations for randomly placed rocks and trees
     #Bulk of this code is to increase likelihood of clumping nature
@@ -115,6 +123,7 @@ def start():
     first_it = True #Variable to keep track of first iteration
     game_running = True
     searchingFor = 1
+    inv_count = 0
 
     while True:
         for event in pygame.event.get():
@@ -127,6 +136,7 @@ def start():
                 #run scoreboard code
 
         if (game_running):
+            value_label = font_renderer.render("Value: " + str(value), 1, (255, 255, 255))
             pX = playerPos[0]
             pY = playerPos[1]
             #Code that gets coordinates for object being searched for
@@ -141,11 +151,14 @@ def start():
             if (pX == oX and pY == oY):
                 #Collect item
                 for i in game_items:
-                    if (pX == game_items[i].location[0] and pY == game_items[i].location[1]):
+                    if (pX == game_items[i].location[0] and \
+                            pY == game_items[i].location[1] and \
+                            game_items[i].hidden == False):
                         game_items[i].hidden = True
-                        #collected_items.append(game_items[i])
                         DISPLAYSURF.blit(i, (WIDTH * 37, HEIGHT))
-                print("FOUND ITEM")
+                        value += game_items[i].value
+                        print(value)
+                        print("FOUND ITEM")
                 searchingFor += 1
             if searchingFor > len(game_items):
                 game_running = False
@@ -163,6 +176,11 @@ def start():
             steps += 1
             print('Step: ', steps)
         
+        for row in range(HEIGHT):
+            for column in range(WIDTH + INV_WIDTH * TILESIZE):
+                DISPLAYSURF.blit(BG, (column * TILESIZE, row * TILESIZE))
+        DISPLAYSURF.blit(inv_label, (WIDTH * TILESIZE + 5, TILESIZE / 2))
+        DISPLAYSURF.blit(value_label, (WIDTH * TILESIZE, TILESIZE * HEIGHT / 2))
         #Display player, sand, rocks and bushes
         for row in range(HEIGHT):
             for column in range(WIDTH):
@@ -174,18 +192,23 @@ def start():
                     DISPLAYSURF.blit(BUSH, (column * TILESIZE, row * TILESIZE))
                 if [column, row] in water_locations:
                     DISPLAYSURF.blit(WATER, (column * TILESIZE, row * TILESIZE))
+
+        for row in range(HEIGHT):
+            for row in range(WIDTH, WIDTH + INV_WIDTH * TILESIZE):
+                DISPLAYSURF.blit(WATER, (column * TILESIZE, row * TILESIZE))
         
         #Display items if not already collected
+        inv_count = 0
         for i in game_items:
             if (game_items[i].hidden != True):
                 DISPLAYSURF.blit(i, (game_items[i].location[0] * TILESIZE, game_items[i].location[1] * TILESIZE))
-
-        #Draw blue line to each uncollected item
-        for i in game_items:
-            if game_items[i].hidden != True:
+                #Draw blue lines
                 pygame.draw.line(DISPLAYSURF, BLUE, (playerPos[0] * TILESIZE,
                     playerPos[1] * TILESIZE), (game_items[i].location[0] *
                         TILESIZE, game_items[i].location[1] * TILESIZE), 2)
+            else:
+                inv_count += 1
+                DISPLAYSURF.blit(i, (WIDTH * TILESIZE + 32, 5 + inv_count * TILESIZE))
 
         pygame.display.update()
         clock.tick(60)
