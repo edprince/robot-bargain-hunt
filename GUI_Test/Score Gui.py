@@ -9,10 +9,8 @@ display_height = 600
  
 black = (0,0,0)
 white = (255,255,255)
-
 red = (200,0,0)
 green = (0,200,0)
-
 bright_red = (255,0,0)
 bright_green = (0,255,0)
  
@@ -37,8 +35,7 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     smallText = pygame.font.SysFont("comicsansms",20)
     textSurf, textRect = text_objects(msg, smallText)
     textRect.center = ( (x+(w/2)), (y+(h/2)) )
-    gameDisplay.blit(textSurf, textRect)
-    
+    gameDisplay.blit(textSurf, textRect) 
 
 def quitgame():
     pygame.quit()
@@ -63,7 +60,12 @@ def game_intro():
 
         largeText = pygame.font.Font('freesansbold.ttf',50)
         TextSurf, TextRect = text_objects("Score:", largeText)
-        TextRect.center = ((150,250))
+        TextRect.center = ((150,200))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.Font('freesansbold.ttf',50)
+        TextSurf, TextRect = text_objects("Steps: ", largeText)
+        TextRect.center = ((158, 275))
         gameDisplay.blit(TextSurf, TextRect)
 
         button("Again!",150,450,100,50,green,bright_green)
