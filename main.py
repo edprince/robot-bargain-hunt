@@ -1,4 +1,5 @@
 #Current ouput should be the list of items in descending order
+#Starting Ed Individual
 from functions import *
 from classes import *
 import pygame
