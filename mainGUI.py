@@ -2,7 +2,7 @@ import pygame
 import environment
 
 
-def main(fps, scene):
+def mainGUI(fps, scene):
     pygame.init()
     done = False
     clock = pygame.time.Clock()
@@ -17,4 +17,4 @@ def main(fps, scene):
 
 
 if __name__ == "__main__":
-    main(60,environment.Environment())
+    mainGUI(60,environment.Environment())
