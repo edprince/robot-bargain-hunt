@@ -185,7 +185,11 @@ def start():
             for column in range(WIDTH + INV_WIDTH * TILESIZE):
                 DISPLAYSURF.blit(BG, (column * TILESIZE, row * TILESIZE))
         DISPLAYSURF.blit(inv_label, (WIDTH * TILESIZE + 10, TILESIZE / 2))
+<<<<<<< HEAD
         DISPLAYSURF.blit(value_label, (WIDTH * TILESIZE + 10, TILESIZE * HEIGHT / 2))
+=======
+        DISPLAYSURF.blit(value_label, (WIDTH * TILESIZE + 10, TILESIZE * HEIGHT / 3))
+>>>>>>> cb2ef85c8ea9db043762c9d6ebd36b7c7fd50ddf
         DISPLAYSURF.blit(asc_label, (WIDTH * TILESIZE + 10, TILESIZE * HEIGHT / 3 + 20))
         DISPLAYSURF.blit(steps_label, (WIDTH * TILESIZE + 10, TILESIZE * HEIGHT / 3 + 40))
         #Display player, sand, rocks and bushes
