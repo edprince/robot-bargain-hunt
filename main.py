@@ -73,7 +73,7 @@ def start():
     #INITIALIZE PYGAME
     #===============
     pygame.init()
-    #Initialize pygame dependent variables
+    #Initialize pygame dependent variables#
     flags = DOUBLEBUF
     DISPLAYSURF = pygame.display.set_mode((INV_WIDTH * TILESIZE + WIDTH*TILESIZE, HEIGHT*TILESIZE), flags)
     clock = pygame.time.Clock()
@@ -94,7 +94,7 @@ def start():
 
 
     #Build array of locations for randomly placed rocks and trees
-    #Bulk of this code is to increase likelihood of clumping nature
+    #Bulk of this code is to increase likelihood of clumping nature#
     for rows in range(WIDTH):
         for columns in range(HEIGHT):
             if [rows + 1, columns] in water_locations or \
