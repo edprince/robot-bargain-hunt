@@ -6,7 +6,6 @@ from constants import *
 import sys
 from pygame.locals import *
 import main
-import character selection
 
 
 class SceneBase():
