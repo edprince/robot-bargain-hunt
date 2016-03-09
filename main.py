@@ -10,7 +10,7 @@ import random
 #pygame dependent function
 def sort_highlight(pX, pY, oX, oY):
     '''Function to highlight items being sorted
-
+    test
     Takes 4 integers, position of item, and position of player'''
     pygame.draw.line(DISPLAYSURF, BLUE, (pX, pY), (oX, oY), 1)
     
