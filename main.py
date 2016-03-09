@@ -7,7 +7,7 @@ import sys
 import math
 import random
 
-#pygame dependent function
+#pygame dependent function#
 def sort_highlight(pX, pY, oX, oY):
     '''Function to highlight items being sorted
 
