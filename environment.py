@@ -48,7 +48,7 @@ class Environment(SceneBase):
         for event in pygame.event.get(): # Menu control
             if event.type == pygame.KEYDOWN: 
                 if (event.key == K_RETURN):
-                    print("START GAME")
+                    print("Start Game")
                     main.start()
                     #if (event.key == K_RETURN) == True:
                     # Code block to start game here
