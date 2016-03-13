@@ -22,6 +22,9 @@ def start():
     rock_locations = []
     bush_locations = []
     water_locations = []
+    obs_locations = []
+    visited = []
+    percentage_covered = 0
     steps = 0
     count = 0
     value = 0
@@ -36,6 +39,7 @@ def start():
     GREEN = (0, 255, 0)
     TIME = 50000
     SAND = pygame.image.load('assets/sand-new.png')
+    SAND_VISITED = pygame.image.load('assets/sand-visited.png')
     STONE = pygame.image.load('assets/stone.png')
     BUSH = pygame.image.load('assets/bush.png')
     WATER = pygame.image.load('assets/water32.png')
@@ -65,7 +69,6 @@ def start():
     for i in range(len(game_items)):
         objs.append(game_items[items[i]])
 
-    print("Sorting into order")
     if ASCENDING == True:
         sorted_list = sort_objects(objs)[::-1]
     else:
@@ -87,7 +90,6 @@ def start():
     font_renderer = pygame.font.Font(default_font, 19)
     #Estabish labels - i.e the text on screen
     inv_label = font_renderer.render("Inventory", 1, (255, 255, 255))
-    print(ASCENDING, "!_-----------------")
     if (ASCENDING):
         asc_label = font_renderer.render("Ascending", 1, (255, 255, 255))
     else:
@@ -128,6 +130,9 @@ def start():
                 bush_locations.append([rows, columns])
 
 
+    #Ed-individual
+    obs_locations = bush_locations + rock_locations + water_locations
+
     #place player in the middle of the screen
     playerPos = [WIDTH / 2, HEIGHT / 2]
     first_it = True #Variable to keep track of first iteration
@@ -147,6 +152,7 @@ def start():
         if (game_running):
             value_label = font_renderer.render("Value: " + str(value), 1, (255, 255, 255))
             steps_label = font_renderer.render("Steps: " + str(steps), 1, (255, 255, 255))
+            covered_label = font_renderer.render("Covered: " + str(percentage_covered) + "%", 1, (255, 255, 255))
             pX = playerPos[0]
             pY = playerPos[1]
             #Code that gets coordinates for object being searched for
@@ -171,7 +177,49 @@ def start():
             if searchingFor > len(game_items):
                 game_running = False
                 start()
+
+            #Ed-individual
             #Searching algorithm
+            queue = []
+            found = False
+            queue.append([playerPos[0], playerPos[1]])
+            i = 0
+            '''
+            while not found or i > 100:
+                if [queue[i][0], queue[i][1]] == [oX, oY]:
+                    print('FOUND')
+                #Look east
+                if not [queue[i][0] + 1, queue[i][1]] in obs_locations:
+                    queue.append([queue[i][0] + 1, queue[i][1]])
+                #Look North East
+                if not [queue[i][0] + 1, queue[i][1] - 1] in obs_locations:
+                    queue.append([queue[i][0] + 1, queue[i][1] - 1])
+                #Look South East
+                if not [queue[i][0] + 1, queue[i][1] + 1] in obs_locations:
+                    queue.append([queue[i][0] + 1, queue[i][1] + 1])
+                #Look West
+                if not [queue[i][0] - 1, queue[i][1]] in obs_locations:
+                    queue.append([queue[i][0] - 1, queue[i][1]])
+                #Look North West
+                if not [queue[i][0] - 1, queue[i][1] - 1] in obs_locations:
+                    queue.append([queue[i][0] - 1, queue[i][1] - 1])
+                #Look South West
+                if not [queue[i][0] - 1, queue[i][1] + 1] in obs_locations:
+                    queue.append([queue[i][0] - 1, queue[i][1] + 1])
+                #Look North
+                if not [queue[i][0], queue[i][1] - 1] in obs_locations:
+                    queue.append([queue[i][0], queue[i][1] - 1])
+                #Look South
+                if not [queue[i][0], queue[i][1] + 1] in obs_locations:
+                    queue.append([queue[i][0], queue[i][1] + 1])
+
+                i += 1
+                '''
+            percentage_covered = int(calculate_percentage(visited, WIDTH, HEIGHT))
+
+
+
+
             if (pX < oX):
                 playerPos[0] += 1
             elif (pX > oX):
@@ -180,6 +228,7 @@ def start():
                 playerPos[1] += 1
             elif (pY > oY):
                 playerPos[1] -= 1
+            visited.append([playerPos[0], playerPos[1]])
             steps += 1
         
         for row in range(HEIGHT):
@@ -189,10 +238,15 @@ def start():
         DISPLAYSURF.blit(value_label, (WIDTH * TILESIZE + 10, TILESIZE * HEIGHT / 3))
         DISPLAYSURF.blit(asc_label, (WIDTH * TILESIZE + 10, TILESIZE * HEIGHT / 3 + 20))
         DISPLAYSURF.blit(steps_label, (WIDTH * TILESIZE + 10, TILESIZE * HEIGHT / 3 + 40))
+        DISPLAYSURF.blit(covered_label, (WIDTH * TILESIZE + 10, TILESIZE * HEIGHT / 3 + 60))
         #Display player, sand, rocks and bushes
         for row in range(HEIGHT):
             for column in range(WIDTH):
-                DISPLAYSURF.blit(SAND, (column * TILESIZE, row * TILESIZE))
+                #Ed-individual
+                if ([column, row] in visited):
+                    DISPLAYSURF.blit(SAND_VISITED, (column * TILESIZE, row * TILESIZE))
+                else:
+                    DISPLAYSURF.blit(SAND, (column * TILESIZE, row * TILESIZE))
                 if [playerPos[0], playerPos[1]] in water_locations:
                     DISPLAYSURF.blit(player_boat, (playerPos[0] * TILESIZE, playerPos[1] * TILESIZE))
                 else:

@@ -1,4 +1,5 @@
 #File for functions used throughout game
+from __future__ import division
 import random
 import math
 
@@ -79,3 +80,15 @@ def disperse(rows, columns, density, upper_range, my_list):
         my_list.append([rows, columns])
 
     return my_list
+
+#Ed individual
+def calculate_percentage(covered, totalW, totalH):
+    '''Function calculate how much of map is visited
+
+    Takes 2 lists and compares to see how much of the ground has been visited'''
+    uniqueTiles = 0
+    for i in range(totalW):
+        for j in range(totalH):
+            if ([i, j] in covered):
+                uniqueTiles += 1
+    return (uniqueTiles / (totalW * totalH)) * 100
