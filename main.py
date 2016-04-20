@@ -227,4 +227,4 @@ def start():
 
         pygame.display.update()
         clock.tick(60)
-start()
+#start()
