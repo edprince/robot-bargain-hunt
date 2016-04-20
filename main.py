@@ -15,6 +15,8 @@ def sort_highlight(pX, pY, oX, oY):
     pygame.draw.line(DISPLAYSURF, BLUE, (pX, pY), (oX, oY), 1)
     
 def start():
+    pygame.mixer.music.load('assets/music.mp3')
+    pygame.mixer.music.play(-1, 0.0)
     #Initialize variables
     objs = []
     collected_items = []
@@ -84,6 +86,7 @@ def start():
     pygame.font.init()
     default_font = pygame.font.get_default_font()
     font_renderer = pygame.font.Font(default_font, 19)
+    font_renderer_larger = pygame.font.Font(default_font, 40)
     #Estabish labels - i.e the text on screen
     inv_label = font_renderer.render("Inventory", 1, (255, 255, 255))
     print(ASCENDING, "!_-----------------")
@@ -138,6 +141,21 @@ def start():
             if event.type==QUIT:
                 pygame.quit()
                 sys.exit
+            if event.type == pygame.KEYDOWN:
+                if (event.key == pygame.K_p):
+                    print("PAUSE ME PLS")
+                    pause = True
+                    while pause == True:
+                        bckImgP = pygame.image.load('mappause.png')
+                        pausedText = font_renderer_larger.render("-PAUSED-", 1, (255, 255, 255))
+                        DISPLAYSURF.blit(pausedText, (WIDTH * TILESIZE - 300, TILESIZE * HEIGHT / 2))
+                        pygame.display.update()
+                        for event in pygame.event.get():
+                            if event.type == pygame.KEYDOWN:
+                                if(event.key == pygame.K_p):
+                                    pause = False
+                                    print("unpause")
+                        
             elif (event.type == USEREVENT):
                 print("GAME END")
                 game_running = False
@@ -180,7 +198,8 @@ def start():
             elif (pY > oY):
                 playerPos[1] -= 1
             steps += 1
-        
+
+        #music
         for row in range(HEIGHT):
             for column in range(WIDTH + INV_WIDTH * TILESIZE):
                 DISPLAYSURF.blit(BG, (column * TILESIZE, row * TILESIZE))
@@ -227,4 +246,6 @@ def start():
 
         pygame.display.update()
         clock.tick(60)
+
+        
 #start()

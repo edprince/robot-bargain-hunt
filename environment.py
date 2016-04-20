@@ -79,7 +79,7 @@ class Environment(SceneBase):
                     print("Pause")
                     self.paused()
                 
-                elif (event.key == K_q): # Quit game
+                elif (event.key == K_q): # Qui game
                     pygame.display.quit()
                     pygame.quit()
                     sys.exit()
