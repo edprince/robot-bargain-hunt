@@ -88,7 +88,8 @@ class Environment(SceneBase):
                     print("unpause")
                     pygame.display.update()
                     self.paused()
-                    main.start()
+
+
                     
     def update(self):
         pass
