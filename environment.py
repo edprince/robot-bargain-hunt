@@ -6,7 +6,7 @@ from constants import *
 import sys
 from pygame.locals import *
 import main
-
+import functions
 
 class SceneBase():
 
@@ -44,6 +44,28 @@ class Environment(SceneBase):
         self.surface.blit(startTheGame, ((500),700))
         self.surface.blit(closeTheMenu, ((649),800))
 
+    def paused(self):
+        print("pause")
+        bckImgP = pygame.image.load('mappause.png')
+        my1 = pygame.font.Font('font1.ttf', 40)
+        pausedText = my1.render("PAUSED", 1, (0,200,0))
+        self.surface.blit(bckImgP, (0,0))
+        self.surface.blit(pausedText, ((500),700))
+        global pause
+        pause = False
+        while pause:
+            for event in pygame.event.get(): # Menu control
+                if event.type == pygame.KEYDOWN: 
+                    if(event.key == pygame.K_q):
+                        pause = False
+                        print("unPause")
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+        pygame.display.update()
+        
+
     def process_input(self):
         for event in pygame.event.get(): # Menu control
             if event.type == pygame.KEYDOWN: 
@@ -52,14 +74,29 @@ class Environment(SceneBase):
                     main.start()
                     #if (event.key == K_RETURN) == True:
                     # Code block to start game here
-                elif (event.key == K_q): # Quit game
+                if(event.key == pygame.K_p):
+                    pause = True
+                    print("Pause")
+                    self.paused()
+                
+                elif (event.key == K_q): # Qui game
                     pygame.display.quit()
                     pygame.quit()
                     sys.exit()
+                elif (event.key == K_o):
+                    pause = False
+                    print("unpause")
+                    pygame.display.update()
+                    self.paused()
+
+
                     
     def update(self):
         pass
+  
 
     def render(self):
         self.gui_group.draw(self.surface)
         pygame.display.flip()
+
+

@@ -1,6 +1,8 @@
 #File for functions used throughout game
 import random
 import math
+import pygame
+import main
 
 def sort_objects(x):
     '''Order objects by value
@@ -79,3 +81,6 @@ def disperse(rows, columns, density, upper_range, my_list):
         my_list.append([rows, columns])
 
     return my_list
+
+def test():
+    print("test")
